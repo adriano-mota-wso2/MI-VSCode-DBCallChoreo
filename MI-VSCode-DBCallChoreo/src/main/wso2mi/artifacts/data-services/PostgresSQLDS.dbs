@@ -1,0 +1,96 @@
+<data name="PostgresSQLDS" serviceNamespace="" serviceGroup="" transports="http https" disableStreaming="true">
+	<description/>
+	<config id="PostgresSQLDS">
+		<property name="driverClassName">org.postgresql.Driver</property>
+		<property name="url">jdbc:postgresql://pg-f4990835-c77e-493a-b85f-bdf9acf638c6-amlabdb265238133-choreo.i.aivencloud.com:23209/defaultdb</property>
+		<property name="username">avnadmin</property>
+		<property name="password">AVNS_N8XL96EmyD5wmJyLRWM</property>
+	</config>
+    <query id="GetAllEmployees" useConfig="PostgresSQLDS">
+    <sql>select Employeenumber, FirstName, LastName, Email, Salary from Employees</sql>
+    <result outputType="json">{
+   "Employees":{
+      "Employee":[
+         {
+            "EmployeeNumber":"$EmployeeNumber",
+            "FirstName":"$FirstName",
+            "LastName":"$LastName",
+            "Email":"$Email",
+            "Salary":"$Salary"
+         }
+      ]
+   }
+}</result>
+  </query>
+  <query id="GetAllEmployeeByID" useConfig="PostgresSQLDS">
+    <sql>select Employeenumber, FirstName, LastName, Email, Salary from Employees where Employeenumber=:Employeenumber</sql>
+    <param name="Employeenumber" sqlType="INTEGER" />
+    <result outputType="json">{
+   "Employees":{
+      "Employee":[
+         {
+            "EmployeeNumber":"$EmployeeNumber",
+            "FirstName":"$FirstName",
+            "LastName":"$LastName",
+            "Email":"$Email",
+            "Salary":"$Salary"
+         }
+      ]
+   }
+}</result>
+  </query>
+  <query id="SetEmployee" useConfig="PostgresSQLDS">
+    <sql>INSERT INTO Employees (FirstName, LastName, Email, Salary) VALUES (:FirstName,:LastName,:Email,:Salary);</sql>
+    <param name="FirstName" paramType="SCALAR" sqlType="STRING" />
+    <param name="LastName" paramType="SCALAR" sqlType="STRING" />
+    <param name="Email" paramType="SCALAR" sqlType="STRING" />
+    <param name="Salary" paramType="SCALAR" sqlType="STRING" />
+  </query>
+  <query id="UpdateEmployee" useConfig="PostgresSQLDS">
+    <sql>UPDATE Employees set LastName=:LastName, FirstName=:FirstName, Email=:Email, Salary=:Salary where EmployeeNumber::text=:EmployeeNumber</sql>
+    <param name="LastName" sqlType="STRING" />
+    <param name="FirstName" sqlType="STRING" />
+    <param name="Email" sqlType="STRING" />
+    <param name="Salary" sqlType="STRING" />
+    <param name="EmployeeNumber" sqlType="STRING" />
+  </query>
+  <query id="DeleteEmployee" useConfig="PostgresSQLDS">
+    <sql>DELETE FROM Employees WHERE Employeenumber=:Employeenumber</sql>
+    <param name="Employeenumber" sqlType="INTEGER" />
+  </query>
+  <resource method="GET" path="Employees">
+    <description>Get All Employees Data</description>
+    <call-query href="GetAllEmployees" />
+  </resource>
+  <resource method="GET" path="Employees/{Employeenumber}">
+    <description>Get Employee By ID</description>
+    <call-query href="GetAllEmployeeByID">
+      <with-param name="Employeenumber" query-param="Employeenumber" />
+    </call-query>
+  </resource>
+  <resource method="POST" path="Employees" returnRequestStatus="true">
+    <description>Save Employee Information</description>
+    <call-query href="SetEmployee">
+      <with-param name="FirstName" query-param="FirstName" />
+      <with-param name="LastName" query-param="LastName" />
+      <with-param name="Email" query-param="Email" />
+      <with-param name="Salary" query-param="Salary" />
+    </call-query>
+  </resource>
+  <resource method="PUT" path="Employees">
+    <description>Update Employee Information</description>
+    <call-query href="UpdateEmployee">
+      <with-param name="LastName" query-param="LastName" />
+      <with-param name="FirstName" query-param="FirstName" />
+      <with-param name="Email" query-param="Email" />
+      <with-param name="Salary" query-param="Salary" />
+      <with-param name="EmployeeNumber" query-param="EmployeeNumber" />
+    </call-query>
+  </resource>
+  <resource method="DELETE" path="/Employees/{Employeenumber}">
+    <description>Remove Employee Data</description>
+    <call-query href="DeleteEmployee">
+      <with-param name="Employeenumber" query-param="Employeenumber" />
+    </call-query>
+  </resource>
+</data>
