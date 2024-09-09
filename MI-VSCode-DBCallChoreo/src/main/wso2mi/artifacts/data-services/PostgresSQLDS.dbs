@@ -4,9 +4,7 @@
 		<property name="driverClassName">org.postgresql.Driver</property>
 		<property name="url">jdbc:postgresql://pg-f4990835-c77e-493a-b85f-bdf9acf638c6-amlabdb265238133-choreo.i.aivencloud.com:23209/defaultdb</property>
 		<property name="username">avnadmin</property>
-    <!--
 		<property name="password">AVNS_N8XL96EmyD5wmJyLRWM</property>
-    -->
 	</config>
     <query id="GetAllEmployees" useConfig="PostgresSQLDS">
     <sql>select Employeenumber, FirstName, LastName, Email, Salary from Employees</sql>
